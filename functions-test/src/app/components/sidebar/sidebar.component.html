@@ -1,0 +1,129 @@
+<div class="h-screen flex flex-col bg-secondary-500 rounded-r-3xl text-white duration-200 ease-out {{ open ? 'md:w-80 w-60' : 'w-24' }}">
+  <div class="text-center py-10">
+    <div class="relative">
+      <ng-container *ngIf="open; else textLogo">
+        <img
+          class="inline-block w-44"
+          alt="test"
+        />
+      </ng-container>
+      <ng-template #textLogo>
+        <span class="relative inline-block text-2xl font-semibold z-20">Test</span>
+      </ng-template>
+    </div>
+  </div>
+
+  <div  class="relative cursor-pointer ease-out flex rounded-md mb-8 mx-6 p-2 cursor-pointer min-h-[2rem] hover:bg-white/20 items-center gap-x-4 duration-200"   (click)="toogleMenu.emit(); closeMenu()">
+      <img src="assets/icon/minimize-2.svg"
+      alt="icon"
+      class="w-6 h-6"
+      />
+      <span
+      class="origin-left font-medium flex-1 truncate"
+      [class.hidden]="!open">
+        <ng-container>Ocultar Menu </ng-container>
+      </span>
+  </div>
+
+  <!-- ITEMS -->
+  <div class="flex-1 overflow-x-hidden style-scrollbar {{ !open ? 'px-2 text-xs': 'px-4 text-sm' }}" #menu>
+    <ul class="grid grid-cols-1 gap-2">
+      <ng-container [ngTemplateOutlet]="itemTemplate" [ngTemplateOutletContext]="{ items: items }"></ng-container>
+    </ul>
+  </div>
+
+  <div
+  class="flex rounded-md  mx-6 p-2 cursor-pointer min-h-[2rem] hover:bg-white/20 items-center gap-x-4 duration-200"
+  (click)="signOut()"
+>
+  <img src="assets/icon/log-in.svg" alt="building" />
+  <span
+    class="origin-left font-medium flex-1 truncate"
+    [class.hidden]="!open"
+  >
+    <ng-container>Sair</ng-container>
+  </span>
+ </div>
+
+  <!-- UNITY -->
+  <div
+    class="flex rounded-md mb-8 mx-6 p-2 cursor-pointer min-h-[2rem] hover:bg-white/20 items-center gap-x-4 duration-200"
+    (click)="openUnity()"
+  >
+    <img src="assets/icon/ri_building-2-line.svg" alt="building" />
+    <span
+      class="origin-left font-medium flex-1 truncate"
+      [class.hidden]="!open"
+    >
+      <ng-container *ngIf="unity">Unidade de acesso </ng-container>
+      <ng-container *ngIf="!unity">Selecionar unidade</ng-container>
+    </span>
+  </div>
+</div>
+
+<!-- ITEM -->
+<ng-template
+  #itemTemplate
+  let-items="items"
+  let-hasSubItems="hasSubItems"
+  let-isSubItem="isSubItem"
+>
+  <li
+    #liEl
+    *ngFor="let item of items"
+    class="{{ !open && item.open && item.subItems?.length ? 'bg-white/10 rounded-md p-2' : '' }}"
+    [ngClass]="{ subItems: item.subItems?.length, open: item.open }"
+  >
+    <div
+      class="uppercase text-slate-400 leading-none font-semibold pt-10 pb-4
+        {{ !open ? 'text-center': '' }}
+        {{ (!open && item.sectionTitle.length > 9) ? 'text-[9px]': '' }}"
+      *ngIf="item.sectionTitle"
+    >
+      {{ item.sectionTitle }}
+    </div>
+
+    <div class="relative">
+      <a
+        class="flex flex-grow items-center min-h-[3rem] rounded-md cursor-pointer hover:bg-white/10 duration-200 ease-out mx-auto
+        {{ !open ? 'justify-center' : 'justify-between p-2 md:p-3 leading-none' }}
+        {{ !open && isSubItem ? 'gap-x-2' : 'gap-x-4' }}"
+        routerLinkActive="bg-white/10"
+        [routerLink]="item.url"
+        [routerLinkActiveOptions]="{exact: true}"
+        (click)="openSubItems($event, liEl, item, !!item.subItems)"
+      >
+        <img
+          class="w-6 h-6"
+          alt="icon"
+          [src]="item.icon"
+          *ngIf="!hasSubItems && item.icon"
+        />
+
+        <img src="assets/icon/corner-down-right.svg"
+         alt="icon"
+         class="w-6 h-6"
+         *ngIf="open && isSubItem"
+        />
+
+        <span class="origin-left leading-none grow font-medium {{isSubItem && !open ? 'font-normal text-[10px] break-words text-center' : '' }}" [class.sr-only]="!open && !isSubItem">
+          {{ item.title }} {{ item.notification ? '*' : '' }}
+        </span>
+
+      </a>
+    </div>
+
+    <div
+      [ngClass]="{ 'pl-11': !hasSubItems && open }"
+      *ngIf="item.subItems?.length"
+    >
+      <ul class="grid grid-cols-1 gap-2 relative">
+        <ng-container
+          [ngTemplateOutlet]="itemTemplate"
+          [ngTemplateOutletContext]="{items: item.subItems, hasSubItems: item.subItems.length, isSubItem: true}"
+        >
+        </ng-container>
+      </ul>
+    </div>
+  </li>
+</ng-template>

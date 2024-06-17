@@ -1,0 +1,24 @@
+<ul class="flex flex-wrap items-center gap-x-4 text-neutral-400">
+  <li>
+    <img src="assets/icon/grid-dark.svg" alt="breadcrumb" />
+  </li>
+  <li>
+    <i class="text-xs fa-solid fa-chevron-right"></i>
+  </li>
+  <li *ngFor="let link of links; index as i">
+    <a
+      routerLinkActive
+      [routerLink]="link.url"
+      #rla="routerLinkActive"
+      [routerLinkActiveOptions]="{ exact: true }"
+      [ngClass]="{ 'text-primary-400 cursor-default': rla.isActive }"
+      class="flex items-center space-x-4"
+    >
+      <span class="origin-left">{{ link.name }}</span>
+      <i
+        class="text-xs fa-solid fa-chevron-right "
+        *ngIf="i !== links.length - 1"
+      ></i>
+    </a>
+  </li>
+</ul>

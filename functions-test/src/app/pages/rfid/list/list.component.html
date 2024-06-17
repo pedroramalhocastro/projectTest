@@ -1,0 +1,57 @@
+<div>
+  <breadcrumb [links]="breadcrumbs"></breadcrumb>
+
+  <app-search-filter
+    [itemsFilterLength]="filterCount"
+    textButtonAdd="Novo RFID"
+    [hideFilterButton]="true"
+    (searchTermChange)="table.searchTerm = $event"
+    (add)="onAdd()"
+  ></app-search-filter>
+
+  <div class="wsg-table">
+    <!-- LOADER -->
+    <app-spinner [container]="true" *ngIf="loading"></app-spinner>
+
+    <ng-container *ngIf="!loading">
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <td>Tipo Local</td>
+              <td>Local</td>
+              <td>Antena</td>
+              <td>Status</td>
+              <td width="80"></td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of table.data$ | async">
+              <td>{{ data.locationType || "---" }}</td>
+              <td>{{ data.serviceStation?.name || data.queue?.name || data.sector?.name ||  "---" }}</td>
+              <td class="m-auto">{{ data.antenna || "---" }}</td>
+              <td>
+                <span class="block w-5 h-5 bg-success-500 rounded-full"></span>
+              </td>
+              <td>
+                <app-dropdown-table
+                  [options]="options"
+                  [value]="data"
+                ></app-dropdown-table>
+              </td>
+            </tr>
+
+            <tr *ngIf="!table.totalRecords">
+              <td colspan="4" class="wsg-table-no-records">
+                Nenhum registro encontrado!
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <app-pagination [table]="table"></app-pagination>
+    </ng-container>
+  </div>
+  <div class="text-left space-x-4 mt-10"></div>
+</div>

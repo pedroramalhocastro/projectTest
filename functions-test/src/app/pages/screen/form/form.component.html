@@ -1,0 +1,54 @@
+<div>
+  <breadcrumb [links]="breadcrumbs"></breadcrumb>
+
+  <!-- LOADER -->
+  <app-spinner [container]="true" *ngIf="loading"></app-spinner>
+
+  <form
+    class="wsg-form"
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    *ngIf="!loading"
+    novalidate
+  >
+    <h3 class="wsg-form-title">Dados gerais</h3>
+
+    <div class="wsg-form-grid">
+      <form-field
+        class="md:col-span-6"
+        label="Departamento"
+        placeholder="Selecione o departamento"
+        type="select"
+        [options]="departments"
+        [control]="controls.departmentId"
+        [showError]="submitted"
+      ></form-field>
+      <form-field
+        class="md:col-span-6"
+        label="Tela"
+        placeholder="Informe o nome da tela"
+        [control]="controls.name"
+        [showError]="submitted"
+      ></form-field>
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="wsg-form-actions">
+      <button
+        type="button"
+        class="wsg-button wsg-button-primary-outline"
+        (click)="goToBack()"
+      >
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        class="wsg-button wsg-button-primary"
+        [disabled]="submitting"
+      >
+        <app-spinner size="4" *ngIf="submitting"></app-spinner>
+        {{ submitting ? "Salvando..." : "Salvar" }}
+      </button>
+    </div>
+  </form>
+</div>

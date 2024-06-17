@@ -1,0 +1,214 @@
+<div>
+
+  <breadcrumb [links]="breadcrumbs"></breadcrumb>
+
+  <!-- LOADER -->
+  <app-spinner [container]="true" *ngIf="loading"></app-spinner>
+
+  <form
+    class="wsg-form"
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()"
+    *ngIf="!loading"
+    novalidate
+  >
+    <h3 class="wsg-form-title">Dados gerais</h3>
+    <div class="wsg-form-grid">
+      <form-field
+        label="Identificação no checklist"
+        placeholder="Informe uma descrição"
+        class="col-span-6"
+        [control]="controls.name"
+        [showError]="submitted"
+      >
+      </form-field>
+      <form-field
+        label="Categoria"
+        type="select"
+        class="col-span-6"
+        placeholder="Selecione uma categoria"
+        [options]="categories"
+        [control]="controls.categoryId"
+        [showError]="submitted"
+      >
+      </form-field>
+      <form-field
+        label="Classificação"
+        type="select"
+        class="col-span-6"
+        placeholder="Classificação"
+        [options]="classifications"
+        [control]="controls.classificationId"
+        [showError]="submitted"
+      >
+      </form-field>
+      <form-field
+        label="Cliente"
+        type="select"
+        class="col-span-6"
+        placeholder="Selecione um cliente"
+        [options]="clients"
+        [control]="controls.clientId"
+        [showError]="submitted"
+      >
+      </form-field>
+      <form-field
+        label="Marca"
+        type="select"
+        class="col-span-3"
+        placeholder="Selecione uma marca"
+        [options]="brands"
+        (change)="onBrand()"
+        [control]="controls.brandId"
+        [showError]="submitted"
+      >
+      </form-field>
+      <form-field
+        label="Modelo"
+        type="select"
+        class="col-span-3"
+        placeholder="Selecione um modelo"
+        [options]="models"
+        [control]="controls.modelId"
+        [showError]="submitted"
+      >
+      </form-field>
+    </div>
+
+    <h3 class="wsg-form-title">Checklist</h3>
+    <div class="wsg-form-grid">
+      <div class="sm:col-span-12 md:col-span-6 flex items-end gap-x-2 md:gap-x-6">
+        <form-field
+          label="Itens do checklist"
+          type="select"
+          class="flex-grow sm:col-span-12 md:col-span-6"
+          placeholder="Seleciona o item"
+          [options]="checklistItems"
+          [control]="controls.items"
+          [showError]="submitted"
+        >
+        </form-field>
+
+        <div
+          class="px-4 py-3 text-white rounded-md duration-200 focus:outline-none bg-primary-400 hover:bg-primary-500 cursor-pointer"
+          (click)="addItem()">
+          Adicionar
+        </div>
+      </div>
+
+      <div class="md:col-span-12 text-slate-400" *ngIf="selectedItems.length === 0">
+        Nenhum item foi adicionado
+      </div>
+
+      <div class="md:col-span-12" *ngIf="selectedItems.length > 0">
+        <label>Itens do checklist</label>
+        <div class="grid md:grid-cols-4 gap-3">
+          <div *ngFor="let item of selectedItems" class="flex justify-between rounded-md bg-white border px-4 py-2 h-11 focus:outline-none text-slate-600 border-slate-300">
+            <span>{{ item.name }}</span>
+            <button (click)="removeItem(item)">X</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="wsg-form-title">Dados adicionais</h3>
+
+    <div class="wsg-form-grid">
+      <div class="md:col-span-12">
+        <div class="flex items-center gap-x-3">
+          <input
+            class="w-5 h-5 border-2 rounded-sm text-primary-400 cursor-pointer focus:ring-primary-400"
+            type="checkbox"
+            formControlName="moveSector"/>
+          <label for="movimentacao" class="text-sm">
+            Gerar movimentação de pátio em caso de não conformidade de algum item
+          </label>
+        </div>
+      </div>
+
+      <div class="sm:col-span-12 md:col-span-12 lg:col-span-6 gap-3">
+        <form-field
+          label="Posto"
+          type="select"
+          class="col-span-6"
+          placeholder="Selecione uma opção"
+          [options]="serviceStations"
+          [control]="controls.serviceStationId"
+          [showError]="submitted">
+        </form-field>
+      </div>
+      <div class="flex"><input type="radio" class="w-5 mt-6" [checked]="form.get('serviceStations')?.value ? true : false"></div>
+
+      <div class="sm:col-span-12 md:col-span-12 lg:col-span-6 gap-3">
+        <form-field
+          label="Pátio"
+          type="select"
+          class="col-span-6"
+          placeholder="Selecione uma opção"
+          [options]="environments"
+          [control]="controls.environmentId"
+          [showError]="submitted">
+        </form-field>
+      </div>
+      <div class="flex"><input type="radio" class="w-5 mt-6" [checked]="form.get('environmentId')?.value ? true : false"></div>
+
+      <div class="sm:col-span-12 md:col-span-12 lg:col-span-6 gap-3">
+        <form-field
+          label="Setor"
+          type="select"
+          class="col-span-6"
+          placeholder="Selecione uma opção"
+          [options]="sectors"
+          [control]="controls.sectorId"
+          [showError]="submitted">
+        </form-field>
+      </div>
+      <div class="flex"><input type="radio" class="w-5 mt-6" [checked]="form.get('sectorId')?.value ? true : false"></div>
+
+      <div class="sm:col-span-12 md:col-span-12 lg:col-span-6 gap-3">
+        <form-field
+          label="Fila"
+          type="select"
+          class="col-span-6"
+          placeholder="Selecione uma opção"
+          [options]="queues"
+          [control]="controls.queueId"
+          [showError]="submitted">
+        </form-field>
+      </div>
+      <div class="flex"><input type="radio" class="w-5 mt-6" [checked]="form.get('queueId')?.value ? true : false"></div>
+
+      <div class="md:col-span-12">
+        <div class="flex items-center gap-x-3">
+          <input
+            class="w-5 h-5 border-2 rounded-sm text-primary-400 cursor-pointer focus:ring-primary-400"
+            type="checkbox"
+            id="ocorrencia"
+            formControlName="generateOccurrence"/>
+          <label for="ocorrencia" class="text-sm">Gerar ocorrência</label>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SUBMIT -->
+    <div class="wsg-form-actions">
+
+      <button
+        type="button"
+        class="wsg-button wsg-button-primary-outline"
+        (click)="goToBack()"
+      >
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        class="wsg-button wsg-button-primary"
+        [disabled]="submitting"
+      >
+        <app-spinner size="4" *ngIf="submitting"></app-spinner>
+        {{ submitting ? "Salvando..." : "Salvar" }}
+      </button>
+    </div>
+  </form>
+</div>

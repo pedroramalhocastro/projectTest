@@ -1,0 +1,12 @@
+li.subItems {
+  &.open {
+    ul {
+      display: block;
+    }
+  }
+
+  ul {
+    display: none;
+  }
+
+}

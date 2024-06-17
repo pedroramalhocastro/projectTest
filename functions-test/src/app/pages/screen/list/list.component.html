@@ -1,0 +1,48 @@
+<div>
+  <breadcrumb [links]="breadcrumbs"></breadcrumb>
+
+  <app-search-filter
+    [itemsFilterLength]="filterCount"
+    textButtonAdd="Nova tela"
+    [hideFilterButton]="true"
+    (searchTermChange)="table.searchTerm = $event"
+    (add)="onAdd()"
+  ></app-search-filter>
+
+  <div class="wsg-table">
+    <!-- LOADER -->
+    <app-spinner [container]="true" *ngIf="loading"></app-spinner>
+
+    <ng-container *ngIf="!loading">
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <td>Segmento</td>
+              <td>Telas</td>
+              <td width="80"></td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of table.data$ | async">
+              <td>{{ data.department?.name || "---" }}</td>
+              <td>{{ data.name }}</td>
+              <td>
+                <app-dropdown-table
+                  [options]="options"
+                  [value]="data"
+                ></app-dropdown-table>
+              </td>
+            </tr>
+
+            <tr *ngIf="!table.totalRecords">
+              <td colspan="3" class="wsg-table-no-records">Nenhum registro encontrado!</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <app-pagination [table]="table"></app-pagination>
+    </ng-container>
+  </div>
+</div>

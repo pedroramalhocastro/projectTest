@@ -1,0 +1,33 @@
+<app-modal>
+  <div class="px-6 py-5 sm:px-20">
+    <div class="mb-7 text-center">
+      <img src="assets/icon/x-circle.svg" class="mx-auto mb-2" />
+      <h2 class="text-2xl font-semibold mb-4">Você tem certeza?</h2>
+      <p class="text-slate-500">Você realmente deseja <b>excluir</b> a tela "{{ data.name }}"?</p>
+    </div>
+
+    <div class="flex gap-5">
+      <div class="w-1/2">
+        <button
+          type="button"
+          (click)="onClose()"
+          [disabled]="submitting"
+          class="w-full py-2 rounded-md border border-primary-400 text-primary-400 duration-300 hover:bg-primary-400 hover:text-white focus:outline-none"
+        >
+          Cancelar
+        </button>
+      </div>
+      <div class="w-1/2">
+        <button
+          type="button"
+          (click)="onSubmit()"
+          [disabled]="submitting"
+          class="w-full py-2 bg-primary-400 text-white rounded-md duration-300 focus:outline-none
+          {{ submitting ? 'opacity-50' : 'hover:bg-primary-500' }}"
+        >
+          {{ submitting ? 'Excluindo...' : 'Sim, excluir' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</app-modal>

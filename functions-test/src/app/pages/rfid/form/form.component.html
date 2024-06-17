@@ -1,0 +1,122 @@
+<div>
+
+  <breadcrumb [links]="breadcrumbs"></breadcrumb>
+
+  <!-- LOADER -->
+  <app-spinner [container]="true" *ngIf="loading"></app-spinner>
+
+  <form *ngIf="!loading"
+    novalidate
+    class="wsg-form"
+    [formGroup]="form"
+    (ngSubmit)="onSubmit()">
+    <h3 class="wsg-form-title">Dados gerais</h3>
+
+    <div class="wsg-form-grid mb-3">
+
+      <form-field
+        class="md:col-span-6"
+        type="radio"
+        [options]="types"
+        [control]="controls.type"
+        [showError]="submitted"
+        (change)="updateType()">
+      </form-field>
+
+
+    </div>
+
+    <div class="wsg-form-grid mb-3">
+
+      <form-field
+        *ngIf="type != 'sector' && type != 'queue'"
+        label="Local"
+        type="select"
+        class="md:col-span-6"
+        placeholder="Selecione o pátio"
+        [options]="environments"
+        [control]="controls.serviceStationId"
+        [showError]="submitted"
+        (change)="updateSelect('serviceStationId')">
+      </form-field>
+
+      <form-field
+        *ngIf="type == 'sector'"
+        label="Local"
+        type="select"
+        class="md:col-span-6"
+        placeholder="Selecione o setor"
+        [options]="sectors"
+        [control]="controls.sectorId"
+        [showError]="submitted"
+        (change)="updateSelect('sectorId')">
+      </form-field>
+
+      <form-field
+        *ngIf="type == 'queue'"
+        label="Local"
+        type="select"
+        class="md:col-span-6"
+        placeholder="Selecione a fila"
+        [options]="queues"
+        [control]="controls.queueId"
+        [showError]="submitted"
+        (change)="updateSelect('queueId')">
+      </form-field>
+
+    </div>
+
+    <div class="wsg-form-grid mb-3">
+
+      <form-field
+        label="Informe o Leitor (Gestor das antenas entre os locais acima)"
+        type="select"
+        class="md:col-span-6"
+        placeholder="Selecione o pátio"
+        [options]="environmentsPoe"
+        [control]="controls.poeId"
+        [showError]="submitted">
+      </form-field>
+
+    </div>
+
+    <div class="grid md:grid-cols-4 gap-x-8 gap-y-4 mb-6">
+      <form-field
+      label="Antena"
+      placeholder="Informe o antena"
+      [control]="controls.antenna"
+      [showError]="submittedItem">
+     </form-field>
+
+
+     <div class="input-container">
+      <label>Local</label>
+      <div  class="input-field">
+        <span>{{selectedEnvironment}}</span>
+      </div>
+    </div>
+
+    </div>
+
+    <hr>
+
+    <!-- SUBMIT -->
+    <div class="wsg-form-actions">
+      <button
+        type="button"
+        class="wsg-button wsg-button-primary-outline"
+        (click)="goToBack()">
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        class="wsg-button wsg-button-primary"
+        [disabled]="submitting">
+        <app-spinner size="4" *ngIf="submitting"></app-spinner>
+        {{ submitting ? "Salvando..." : "Salvar" }}
+      </button>
+    </div>
+
+  </form>
+
+</div>

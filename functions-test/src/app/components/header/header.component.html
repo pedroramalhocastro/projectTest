@@ -1,0 +1,18 @@
+<header class="pt-0 pb-10">
+  <div class="flex flex-col md:flex-row md:items-center justify-end gap-y-2">
+    <div class="flex items-center justify-between md:justify-end">
+      <div class="mr-3" *ngIf="user">
+        <img [src]="user.pictureFile || 'assets/img/avatar.png'" class="rounded-full w-10 cursor-pointer" (click)="editPerfil()" alt="">
+      </div>
+      <div>
+        <span class="text-base cursor-pointer" (click)="toggleMenu()">{{ user?.name }}</span>
+        <button class="ml-3 focus:outline-none" id="menuButton" (click)="toggleMenu()">
+          <i class="fas {{ menuVisible ? 'fa-chevron-up' : 'fa-chevron-down' }}"></i>
+        </button>
+      </div>
+      <div class="absolute mt-28 w-48 bg-white rounded-md shadow-xl z-20" id="menuOptions" [ngStyle]="{'display': menuVisible ? 'block' : 'none'}">
+        <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer" (click)="editPerfil()">Meu perfil</a>
+      </div>
+    </div>
+  </div>
+</header>

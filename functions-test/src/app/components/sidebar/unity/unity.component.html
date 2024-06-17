@@ -1,0 +1,48 @@
+<app-modal>
+  <div class="p-8">
+    <div class="mb-7">
+      <h2 class="text-2xl font-bold mb-4 text-secondary-500 mb-11 text-center">Selecione a Unidade</h2>
+      <div class="grid gap-x-8 gap-y-4 mb-6">
+        <form-field
+          label="Unidade"
+          type="select"
+          placeholder="Selecione a unidade"
+          [options]="unities"
+          [control]="controls.id"
+          [showError]="submitted"
+        ></form-field>
+      </div>
+      <div class="flex flex-col mb-11">
+        <span class="text-secondary-500 text-sm font-medium">Unidade atual:</span>
+        <span class="text-sm font-normal">{{unity?.fantasyName}} - {{unity?.cnpj ? (unity!.cnpj | mask: '00.000.000/0000-00') : ''}}</span>
+      </div>
+    </div>
+
+    <div class="flex gap-5 items-center justify-center">
+      <button
+          type="button"
+          (click)="onClose()"
+          class="px-4 py-2 border border-primary-400 text-primary-400 rounded-md duration-200 hover:bg-primary-400 hover:text-white focus:outline-none">
+          Cancelar
+        </button>
+        <button
+          type="button"
+          (click)="onSubmit()"
+          [disabled]="submitting ? true : null"
+          [ngClass]="{'opacity-30': submitting}"
+          class="px-4 py-2 text-white rounded-md duration-200 focus:outline-none bg-primary-400 opacity-30">
+          {{ loading ? 'Confirmando...' : 'Confirmar' }}
+        </button>
+    </div>
+  </div>
+</app-modal>
+
+<!-- INPUT VALUE -->
+<ng-template #inputValue let-label="label" let-value="value">
+  <div [style.visibility]="loading ? 'hidden' : 'visible'">
+    <p class="mb-3 text-white  uppercase">{{ label }}</p>
+    <div class="rounded-md bg-white p-3 text-slate-500 border border-slate-300">
+      <p>{{ value || '---' }}</p>
+    </div>
+  </div>
+</ng-template>

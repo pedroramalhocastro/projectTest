@@ -1,0 +1,6 @@
+:host {
+
+  .app-spinner.app-spinner--is-container {
+    @apply grid grid-cols-1 place-items-center p-10;
+  }
+}
